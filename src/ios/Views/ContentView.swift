@@ -6951,6 +6951,7 @@ private let supportedLanguages: [LanguageOption] = [
     LanguageOption(id: "fr",     name: "Français", flag: "🇫🇷"),
     LanguageOption(id: "de",     name: "Deutsch", flag: "🇩🇪"),
     LanguageOption(id: "ru",     name: "Русский", flag: "🇷🇺"),
+    LanguageOption(id: "hr",    name: "Hrvatski", flag: "🇭🇷"),
 ]
 
 private struct FontScaleRow: View {

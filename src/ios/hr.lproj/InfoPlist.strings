@@ -1,0 +1,19 @@
+/* Hrvatski opisi dopuštenja. */
+"NSLocationWhenInUseUsageDescription" = "Minis koristi lokaciju za bilježenje mjesta pokretanja razgovora u vašoj povijesti.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Minis koristi lokaciju u pozadini kako bi zadaci agenta nastavili raditi dok je aplikacija u pozadini. Lokacija se koristi samo za povijest povezivanja sesija.";
+"NSCalendarsUsageDescription" = "Minis treba pristup kalendaru kako bi agent mogao pregledavati raspored, provjeravati slobodne termine i stvarati događaje za vas.";
+"NSCalendarsFullAccessUsageDescription" = "Minis treba pristup kalendaru kako bi agent mogao pregledavati raspored, provjeravati slobodne termine i stvarati događaje za vas.";
+"NSRemindersUsageDescription" = "Minis treba pristup podsjetnicima kako bi ih agent mogao pregledavati i stvarati za vas.";
+"NSRemindersFullAccessUsageDescription" = "Minis treba pristup podsjetnicima kako bi ih agent mogao pregledavati i stvarati za vas.";
+"NSCameraUsageDescription" = "Minis treba pristup kameri za snimanje fotografija koje prilažete razgovoru.";
+"NSPhotoLibraryUsageDescription" = "Minis treba pristup fotografijama kako biste ih mogli priložiti razgovoru.";
+"NSPhotoLibraryAddUsageDescription" = "Minis treba dopuštenje za spremanje slika i videozapisa u vašu zbirku fotografija.";
+"NSHealthShareUsageDescription" = "Minis treba pristup aplikaciji Zdravlje kako bi agent mogao čitati vaše podatke o koracima, pulsu, spavanju i vježbanju.";
+"NSHealthUpdateUsageDescription" = "Minis treba dopuštenje za upis u aplikaciju Zdravlje kako bi agent mogao bilježiti podatke poput koraka, težine i unosa vode.";
+"NSContactsUsageDescription" = "Minis treba pristup kontaktima kako bi ih agent mogao pretraživati, pregledavati i uređivati za vas.";
+"NSAppleMusicUsageDescription" = "Minis treba pristup medijskoj zbirci kako bi agent mogao pretraživati vašu glazbu i upravljati reprodukcijom.";
+"NSMicrophoneUsageDescription" = "Minis treba pristup mikrofonu za glasovni unos poruka.";
+"NSSpeechRecognitionUsageDescription" = "Minis koristi prepoznavanje govora za pretvaranje vašeg glasa u tekstualne poruke.";
+"NSHomeKitUsageDescription" = "Minis treba pristup sustavu HomeKit kako bi agent mogao pregledavati i upravljati uređajima vašeg pametnog doma.";
+"NSAlarmKitUsageDescription" = "Minis koristi AlarmKit kako bi agent mogao postavljati alarme i brojače vremena za vas.";
+"NSLocalNetworkUsageDescription" = "Minis treba pristup lokalnoj mreži za mrežne veze Linux okruženja.";

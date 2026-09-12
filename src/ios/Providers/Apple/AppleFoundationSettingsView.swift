@@ -2,9 +2,14 @@ import SwiftUI
 import FoundationModels
 
 struct AppleFoundationSettingsView: View {
+    var instanceID: String? = nil
     @ObservedObject private var store = ProviderConfigStore.shared
     @Environment(\.dismiss) private var dismiss
-    private var installed: Bool { store.instances.contains { $0.providerType == .appleFoundation } }
+    private var selectedInstance: ProviderInstance? {
+        if let instanceID { return store.instance(for: instanceID) }
+        return store.instances.first { $0.providerType == .appleFoundation }
+    }
+    private var installed: Bool { selectedInstance != nil }
     var body: some View {
         Form {
             Section("On Device") {
@@ -31,7 +36,7 @@ struct AppleFoundationSettingsView: View {
             }
             Section {
                 Button(installed ? "Refresh Apple Models" : "Add Apple Models") {
-                    if let instance = store.instances.first(where: { $0.providerType == .appleFoundation }) {
+                    if let instance = selectedInstance {
                         store.replaceEntries(for: instance.id, models: AppleFoundationProvider.models)
                     } else {
                         store.addInstance(ProviderInstance(label: "Apple Foundation Models", providerType: .appleFoundation, credentialType: .apiKey))

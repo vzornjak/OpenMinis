@@ -86,7 +86,7 @@ enum DebugRPCProvider {
         let isEnabled = (params["isEnabled"] as? Bool) ?? true
         let seedBuiltInModels = (params["seedBuiltInModels"] as? Bool) ?? true
 
-        if credentialType == .apiKey, apiKey == nil || apiKey?.isEmpty == true {
+        if providerType != .appleFoundation, credentialType == .apiKey, apiKey == nil || apiKey?.isEmpty == true {
             throw DebugRPCErr(-32602, "apiKey is required when credentialType=apiKey")
         }
 

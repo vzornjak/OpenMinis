@@ -366,7 +366,10 @@ private struct InstanceRow: View {
     /// Both display properties come from one cached probe, so a body pass costs
     /// zero Keychain round-trips once warm.
     private var credentialDisplay: ProviderRowCredentialCache.Display {
-        ProviderRowCredentialCache.shared.value(for: instance.id, revision: store.authRevision) {
+        if instance.providerType == .appleFoundation {
+            return .init(isConfigured: true, summary: AppLocalized("No key required"))
+        }
+        return ProviderRowCredentialCache.shared.value(for: instance.id, revision: store.authRevision) {
             let configured: Bool
             let summary: String
             switch instance.credentialType {

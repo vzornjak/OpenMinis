@@ -27,7 +27,7 @@ final class AppleFoundationProvider: LLMProvider, AgentProvider, @unchecked Send
     }
 
     static var models: [LLMModel] {
-        var local = LLMModel(id: localID, displayName: "Apple · On Device", provider: "Apple",
+        var local = LLMModel(id: localID, displayName: AppLocalized("Apple · On Device"), provider: "Apple",
                              modalityOverride: .textOnly, contextWindow: 4096, maxOutputTokens: 1024, supportsReasoning: false)
         if #available(iOS 26.4, macOS 26.4, *) {
             local.contextWindow = SystemLanguageModel.default.contextSize
@@ -36,7 +36,7 @@ final class AppleFoundationProvider: LLMProvider, AgentProvider, @unchecked Send
         var result = [local]
         // Never construct PCC without the signed entitlement: some OS builds terminate.
         if #available(iOS 27, macOS 27, *), pccEntitled {
-            result.append(LLMModel(id: pccID, displayName: "Apple · Private Cloud Compute", provider: "Apple",
+            result.append(LLMModel(id: pccID, displayName: AppLocalized("Apple · Private Cloud Compute"), provider: "Apple",
                                   modalityOverride: [.textInput, .imageInput, .textOutput],
                                   contextWindow: 32768, maxOutputTokens: 4096, supportsReasoning: true))
         }

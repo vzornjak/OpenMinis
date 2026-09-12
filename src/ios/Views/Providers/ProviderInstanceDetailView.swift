@@ -37,7 +37,7 @@ struct ProviderInstanceDetailView: View {
         Group {
             if let instance = instance {
                 if instance.providerType == .appleFoundation {
-                    AppleFoundationSettingsView()
+                    AppleFoundationSettingsView(instanceID: instance.id)
                 } else {
                     instanceContent(instance)
                 }
@@ -1725,4 +1725,3 @@ private struct ProviderShareSheet: UIViewControllerRepresentable {
     }
     func updateUIViewController(_ vc: UIActivityViewController, context: Context) {}
 }
-

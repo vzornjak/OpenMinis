@@ -34,6 +34,9 @@ def prepare_personal_team(ios: pathlib.Path):
         "E5E000080 /* PBXTargetDependency */",
         "E5H000080 /* PBXTargetDependency */",
         "E5FP00080 /* PBXTargetDependency */",
+        "E5E000040 /* MinisShare */",
+        "E5H000040 /* AgentWidgetExtension */",
+        "E5FP00040 /* MinisFileProvider */",
     ):
         replace_once(ios, project, "\t\t\t\t" + entry + ",\n", "")
 

@@ -18,7 +18,7 @@ razvoja autora. `main` u našem forku prati izvornik; naše promjene su u
   argumenti, kod ili URL-ovi zaustavljaju provjeru.
 - Izvorni odabir modela dobiva Apple Foundation Models bez API ključa.
   Dodavanje: Postavke → pružatelji modela → dodaj → Apple Foundation Models.
-  Zatim odabrati `Apple · On Device` u razgovoru.
+  Zatim odabrati `Apple · Na uređaju` u razgovoru.
 - Lokalni tekst i slike, streaming, dinamičke sheme alata, provjera dostupnosti
   i jezika, stvarni broj tokena i veličina konteksta iz Appleova API-ja.
 - Kraća ugrađena uputa i opisi poznatih alata za mali lokalni kontekst.
@@ -137,7 +137,11 @@ Potpisana aplikacija provjerena 13. rujna kopirana je u `.build/signed/Minis.app
 Mac testovi koriste stvarni produkcijski adapter i njegove izvorne wire
 vrste. Samo golemi katalog modela i dohvat lokalizacije imaju malu fixture
 zamjenu. To provjerava protokol i predaju alata, a ne cijeli iOS runtime.
-Test stvarnog modela treba `RUN_APPLE_MODEL_SMOKE=1` u testnoj okolini i
+`--test` stvara fokusirani XCTest target samo s našim testovima u generiranoj
+kopiji. Puni izvorni testni target trenutačno uključuje samostalne Swift skripte
+i ne prolazi kompilaciju; njegovi testovi nisu uklonjeni iz izvora niti su
+proglašeni prolaznima. `--model-smoke` u testnu okolinu dodaje
+`RUN_APPLE_MODEL_SMOKE=1`. Test stvarnog modela treba i
 uključeni Apple Intelligence. Ne šalje podatke u oblak niti izvršava shell.
 
 ## Povlačenje novog izvornika
@@ -174,25 +178,48 @@ funkcionalnosti. Minimalna provjera na iPhoneu za svako izdanje:
 - Izgradnja pune varijante bez potpisa: **BUILD SUCCEEDED**.
 - Izgradnja Personal Team varijante bez potpisa: **BUILD SUCCEEDED**.
 - Mac adapter testovi: **9 prošlo, 1 preskočen, 0 grešaka**.
+- Fokusirani XCTest paket za fizički iPhone: **BUILD SUCCEEDED**, potpis
+  provjeren; stvarni app modul, bez fixture zamjene. Izvršavanje na uređaju
+  još nije potvrđeno jer je iPhone postao nedostupan.
+- GitHub `Fork checks` prolazi. Probno osvježavanje iz izvornika prolazi;
+  lokalni i udaljeni `main` odgovaraju potvrđenom upstream SHA-u.
 - Katalog: **2163/2163**, bez nedostajućih ili nevaljanih ključeva.
 - Potpisivanje kroz Xcode GUI: **BUILD SUCCEEDED**, potpis i entitlementi
   provjereni s `codesign --verify --deep --strict`; instalacija na fizički
-  iPhone uspješna (`com.vzornjak.openminis`). Profil vrijedi do 19. rujna 2026.
+  iPhone uspješna (`com.vzornjak.openminis`). Profil vrijedi do 19. rujna 2026. u 22:50 UTC
+  (20. rujna u 00:50 po zagrebačkom vremenu).
   CLI pristup ključu vraća `errSecInternalComponent`; GUI potpisivanje radi.
-  iOS je zasad blokirao prvo pokretanje uz poruku o povjerenju/profilu;
-  korisnik treba provjeriti povjerenje razvojnom računu na iPhoneu.
-  Test stvarnog rada na uređaju još nije potvrđen.
+  Pokretanje na fizičkom iPhoneu sada je potvrđeno.
+  iPhone je zatim postao nedostupan Xcodeu, pa izvršavanje testova lokalnog
+  modela i instalacija zadnje dorade čekaju ponovno povezivanje uređaja.
 - Apple Intelligence nije uključen na korištenom Macu, pa lokalna inferencija
   nije potvrđena. PCC nije odobren i nije pokrenut.
 - Originalni build prvo je zapeo na stvarnom deployment targetu 16.0 koji
   ne odgovara korištenim API-jima, a potom na predugom SwiftUI izrazu.
   Fork postavlja iOS 27 i dijeli jedan lanac modifikatora ContentViewa.
+- Provjera izvornog XCTest targeta otkrila je samostalne top-level Swift
+  skripte i djelomično uključene produkcijske pomoćne datoteke bez AppLoggera.
+  Fokusirani build adaptera koristi stvarni app modul i izbjegava te
+  nepovezane kopije; puni upstream test suite nije potvrđen.
 - Bundle i podaci odvojeni su od originala. Izvorni `minis://` i `minis-mcp`
   URL protokoli ostaju zajednički: vanjsko otvaranje linka uz obje instalacije
   može završiti u aplikaciji koju odabere sustav. Ugrađeni linkovi koriste
   postojeće unutarnje usmjeravanje. Vanjski launcher/OAuth treba dodatnu
   provjeru prije paralelne svakodnevne uporabe.
 
+Kad je iPhone ponovno dostupan, već potpisane fokusirane testove može se
+pokrenuti bez nove izgradnje i potpisivanja:
+
+```sh
+DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer xcodebuild \
+  test-without-building \
+  -xctestrun .build/device-test-products/Minis_Minis_iphoneos27.0-arm64.xctestrun \
+  -destination "id=DEVICE_ID" \
+  -only-testing:MinisTests/AppleFoundationProviderTests \
+  -resultBundlePath .build/device-tests-result.xcresult
+```
+
+Ovaj snapshot sadrži test stvarnog modela uključen u testnoj okolini.
 Lokalni detaljni logovi su u `.build/logs/`. Izvorno istraživanje svih grana je
 u susjednoj mapi `../research/openminis-2026-09-13/REPORT.md`. Buildovi,
 prevoditeljski modeli i cache nisu dio javnog repozitorija. GPLv3 i izvorne

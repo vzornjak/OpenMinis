@@ -15,6 +15,8 @@ jobs:
         run: python3 scripts/fork/localize.py
       - name: Validate Personal Team adaptation against upstream anchors
         run: python3 scripts/fork/build.py --personal-team --prepare-only
+      - name: Validate focused device test preparation without signing
+        run: python3 scripts/fork/build.py --personal-team --team CI_ONLY --device CI_ONLY --model-smoke --prepare-only
       - name: Check maintained source was not rewritten
         run: git diff --exit-code
       - name: Check update script syntax

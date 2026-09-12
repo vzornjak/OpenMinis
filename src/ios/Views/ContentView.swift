@@ -1254,7 +1254,7 @@ struct ContentView: View {
     /// override where the user just chose to be.
     private static let pendingBackgroundNavigationTTL: TimeInterval = 90
 
-    var body: some View {
+    private var presentedContent: some View {
         GeometryReader { geo in
             let wide = isIPad && geo.size.width >= compactThreshold
             Group {
@@ -1750,6 +1750,11 @@ struct ContentView: View {
             fetchAlarmsIfNeeded()
             await refreshRemoteDeviceSessions()
         }
+    }
+
+    // Keep the modifier chain within the Xcode 27 type-checker budget.
+    var body: some View {
+        presentedContent
         .onReceive(NotificationCenter.default.publisher(for: .cloudSyncDidFetchChanges)) { _ in
             // [T-ios-state-publish-offmain-crash] cloud-sync fetch fires off-main;
             // force the @State write onto the main thread.

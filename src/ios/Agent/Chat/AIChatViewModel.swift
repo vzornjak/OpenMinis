@@ -1032,7 +1032,7 @@ final class AIChatViewModel: ObservableObject, SpeechControlling {
             return instance.customBaseURL?.isEmpty == false
         case .openRouter, .xAI, .kimiCode:
             return true
-        case .anthropic, .gemini, .antigravity, .unsupported:
+        case .anthropic, .gemini, .antigravity, .appleFoundation, .unsupported:
             return false
         }
     }
@@ -1113,7 +1113,7 @@ final class AIChatViewModel: ObservableObject, SpeechControlling {
                 level = thinkLvl.displayName
             case .openAI, .openAIResponses, .openRouter, .xAI, .kimiCode:
                 level = OpenAIAgentProvider.reasoningEffort(for: model, level: thinkLvl) ?? "—"
-            case .unsupported:
+            case .appleFoundation, .unsupported:
                 level = "—"
             case .antigravity:
                 let lid = model.id.lowercased()
@@ -1819,6 +1819,9 @@ final class AIChatViewModel: ObservableObject, SpeechControlling {
     }
 
     private var baseSystemPrompt: String {
+        if resolveCurrentEntry()?.model.id == AppleFoundationProvider.localID {
+            return AppleFoundationProvider.compactSystemPrompt(identity: SystemPromptBuilder.identitySection())
+        }
         // [T-soul-md] Layer 1 is rendered by SystemPromptBuilder, which
         // owns the "You are <name>, a capable AI assistant running on an
         // iOS device ..." identity sentence (parametric on SOUL.md's
@@ -1826,7 +1829,7 @@ final class AIChatViewModel: ObservableObject, SpeechControlling {
         // Personality section from SOUL.md's body. The original wording
         // is preserved inside SystemPromptBuilder.identityTemplate so we
         // don't regress model behavior that depended on it.
-        SystemPromptBuilder.identitySection()
+        return SystemPromptBuilder.identitySection()
             + "You should proactively use shell commands to accomplish the user's tasks — installing packages (apk add), "
             + "writing and running scripts, managing files, networking, and any other operations a Linux terminal can perform.\n\n"
             + "Available tools:\n"

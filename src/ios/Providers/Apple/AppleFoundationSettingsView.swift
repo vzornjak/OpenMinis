@@ -1,0 +1,45 @@
+import SwiftUI
+import FoundationModels
+
+struct AppleFoundationSettingsView: View {
+    @ObservedObject private var store = ProviderConfigStore.shared
+    @Environment(\.dismiss) private var dismiss
+    private var installed: Bool { store.instances.contains { $0.providerType == .appleFoundation } }
+    var body: some View {
+        Form {
+            Section("On Device") {
+                Label(SystemLanguageModel.default.isAvailable ? AppLocalized("Available") : AppLocalized("Unavailable"),
+                      systemImage: SystemLanguageModel.default.isAvailable ? "checkmark.circle" : "exclamationmark.circle")
+                Text("Uses Apple's model on this device. Model inference works offline; tools such as browsing and SSH may use the network.")
+                    .font(.footnote)
+                if !SystemLanguageModel.default.isAvailable {
+                    Text("Enable Apple Intelligence in Settings and wait for its model to download.")
+                }
+                Text(SystemLanguageModel.default.supportsLocale(Locale(identifier: "hr"))
+                     ? AppLocalized("Apple reports Croatian model support on this device.")
+                     : AppLocalized("Croatian UI is available. Apple does not report Croatian model support on this device; responses may be limited."))
+                    .font(.footnote).foregroundStyle(.secondary)
+            }
+            Section("Private Cloud Compute") {
+                if AppleFoundationProvider.pccEntitled {
+                    Text("Select Apple · Private Cloud Compute in the model picker to send requests to Apple's private cloud. Daily limits apply.")
+                } else {
+                    Text("Private Cloud Compute requires Apple's approval and a signed PCC entitlement for this app.")
+                }
+                Text("Apple selects the underlying model. Cloud Pro cannot be selected explicitly. This provider never switches from local to cloud automatically.")
+                    .font(.footnote).foregroundStyle(.secondary)
+            }
+            Section {
+                Button(installed ? "Refresh Apple Models" : "Add Apple Models") {
+                    if let instance = store.instances.first(where: { $0.providerType == .appleFoundation }) {
+                        store.replaceEntries(for: instance.id, models: AppleFoundationProvider.models)
+                    } else {
+                        store.addInstance(ProviderInstance(label: "Apple Foundation Models", providerType: .appleFoundation, credentialType: .apiKey))
+                    }
+                    dismiss()
+                }
+            }
+        }
+        .navigationTitle("Apple Foundation Models")
+    }
+}

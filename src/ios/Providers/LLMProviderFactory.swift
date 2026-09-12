@@ -18,6 +18,8 @@ enum LLMProviderFactory {
             throw FactoryError.noInstance
         }
         switch instance.providerType {
+        case .appleFoundation:
+            return AppleFoundationProvider(model: entry.model)
         case .anthropic:
             return makeAnthropicProvider(instance: instance, model: entry.model)
         case .gemini:

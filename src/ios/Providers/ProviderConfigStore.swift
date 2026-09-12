@@ -798,6 +798,11 @@ final class ProviderConfigStore: ObservableObject {
 
     func addInstance(_ instance: ProviderInstance) {
         config.instances.append(instance)
+        if instance.providerType == .appleFoundation {
+            config.modelEntries.append(contentsOf: AppleFoundationProvider.models.map { ModelEntry(providerInstanceId: instance.id, model: $0) })
+            save()
+            return
+        }
         if instance.credentialType == .oauth {
             // OAuth instances: pre-populate with static built-in list, enriched with models.dev data.
             let builtIn: [LLMModel]
@@ -2621,6 +2626,7 @@ final class ProviderConfigStore: ObservableObject {
 
     /// Fetch the model list from a provider's API for the given instance.
     static func fetchModelsForInstance(_ instance: ProviderInstance, forceRefresh: Bool = false) async throws -> [LLMModel] {
+        if instance.providerType == .appleFoundation { return AppleFoundationProvider.models }
         let customBase = instance.effectiveCustomBaseURL
         let appendV1 = instance.appendV1Suffix
         // Custom UA only for custom-base OpenAI/Anthropic-compat instances (proxy/relay);
@@ -2723,7 +2729,7 @@ final class ProviderConfigStore: ObservableObject {
             let kimiBase = customBase ?? "https://api.kimi.com/coding"
             let kimiAppendV1 = customBase == nil ? true : appendV1  // default base …/coding needs /v1 appended
             return try await OpenAIModelsAPI.fetchModels(apiKey: token, baseURL: kimiBase, appendV1Suffix: kimiAppendV1, forceRefresh: forceRefresh, userAgent: nil)
-        case (.unsupported, _):
+        case (.appleFoundation, _), (.unsupported, _):
             // Synced from a newer build — can't fetch; keep whatever's stored.
             return []
         }
@@ -2905,7 +2911,7 @@ final class ProviderConfigStore: ObservableObject {
         case .gemini: return "https://generativelanguage.googleapis.com"
         case .openRouter: return "https://openrouter.ai/api"
         case .antigravity: return nil // No public base URL
-        case .unsupported: return nil // synced from newer build
+        case .appleFoundation, .unsupported: return nil // synced from newer build
         }
     }
 

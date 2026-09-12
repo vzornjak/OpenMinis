@@ -521,6 +521,8 @@
 		RCL000119 /* BackupHistoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = RCL000219 /* BackupHistoryDetailView.swift */; };
 		RCL000120 /* BackupCategoryIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = RCL000220 /* BackupCategoryIcon.swift */; };
 		RCL000121 /* BackupHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = RCL000221 /* BackupHUD.swift */; };
+		FA0000000000000000000002 /* AppleFoundationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000001; };
+		FA0000000000000000000012 /* AppleFoundationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000011; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1197,6 +1199,8 @@
 		RCL000219 /* BackupHistoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupHistoryDetailView.swift; sourceTree = "<group>"; };
 		RCL000220 /* BackupCategoryIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupCategoryIcon.swift; sourceTree = "<group>"; };
 		RCL000221 /* BackupHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupHUD.swift; sourceTree = "<group>"; };
+		FA0000000000000000000001 /* AppleFoundationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppleFoundationProvider.swift; path = Providers/Apple/AppleFoundationProvider.swift; sourceTree = SOURCE_ROOT; };
+		FA0000000000000000000011 /* AppleFoundationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppleFoundationSettingsView.swift; path = Providers/Apple/AppleFoundationSettingsView.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -1498,6 +1502,8 @@
 				E5OARC031 /* OAuthRefreshSingleFlight.swift */,
 				E52000013 /* LLMProvider.swift */,
 				E5F00002 /* LLMProviderFactory.swift */,
+				FA0000000000000000000011 /* AppleFoundationSettingsView.swift */,
+				FA0000000000000000000001 /* AppleFoundationProvider.swift */,
 				E59000011 /* AgentProvider.swift */,
 				E5D00011 /* ProviderTypes.swift */,
 				E5D00012 /* ProviderInstance.swift */,
@@ -2713,6 +2719,8 @@
 				E52000002 /* LLMError.swift in Sources */,
 				E52000003 /* LLMProvider.swift in Sources */,
 				E5F00001 /* LLMProviderFactory.swift in Sources */,
+				FA0000000000000000000012 /* AppleFoundationSettingsView.swift in Sources */,
+				FA0000000000000000000002 /* AppleFoundationProvider.swift in Sources */,
 				E52000004 /* AnthropicProvider.swift in Sources */,
 				E52000006 /* OAuthHTTPClient.swift in Sources */,
 				E52000007 /* ClaudeOAuthManager.swift in Sources */,

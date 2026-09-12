@@ -414,7 +414,7 @@ private struct InstanceRow: View {
         case .openAIResponses: return false // API key only
         case .xAI: return XAIOAuthManager.shared.isAuthenticated(instanceId: instance.id)
         case .kimiCode: return KimiOAuthManager.shared.isAuthenticated(instanceId: instance.id)
-        case .unsupported: return false // synced from newer build
+        case .appleFoundation, .unsupported: return false // synced from newer build
         }
     }
 

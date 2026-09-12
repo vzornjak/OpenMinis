@@ -295,7 +295,7 @@ private let logger = AppLogger(category: "ModelUseOffload")
               {"messages":[{"role":"user","content":"<prompt>"}],
                "generation_config":{"aspect_ratio":"16:9","image_size":"2K"}}
             """
-        case .unsupported:
+        case .appleFoundation, .unsupported:
             return ""
         case .openAI, .openAIResponses, .openRouter, .xAI, .kimiCode:
             return """

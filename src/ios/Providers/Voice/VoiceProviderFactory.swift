@@ -36,6 +36,7 @@ enum VoiceProviderFactory {
         let normalizedBase = (custom ?? "").lowercased()
 
         switch instance.providerType {
+        case .appleFoundation: return nil
 
         // OpenAI-compatible families ---------------------------------------
         case .openAI, .openAIResponses:
@@ -127,7 +128,7 @@ enum VoiceProviderFactory {
 
         // Antigravity has no OpenAI-compatible voice path; unsupported = synced
         // from a newer build this version can't service.
-        case .antigravity, .kimiCode, .unsupported:
+        case .antigravity, .kimiCode, .appleFoundation, .unsupported:
             return nil
         }
     }

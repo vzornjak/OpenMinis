@@ -26,6 +26,7 @@ enum ProviderType: String, Codable, CaseIterable, Hashable, Sendable {
     /// to a wrong type on the next save. The original raw string is kept alongside
     /// (see ProviderInstance.unknownProviderTypeRaw) for faithful round-tripping.
     case unsupported
+    case appleFoundation
 
     /// Decode a raw provider-type string, never throwing: an unrecognized value
     /// maps to `.unsupported` (forward-compat with newer builds).
@@ -43,6 +44,7 @@ enum ProviderType: String, Codable, CaseIterable, Hashable, Sendable {
         case .openAIResponses: return "Responses API (v3)"
         case .xAI: return "xAI (Grok)"
         case .kimiCode: return "Kimi Code"
+        case .appleFoundation: return "Apple Foundation Models"
         case .unsupported: return "Unsupported"
         }
     }
@@ -58,6 +60,7 @@ enum ProviderType: String, Codable, CaseIterable, Hashable, Sendable {
         case .openAIResponses: return LLMModel.allOpenAI
         case .xAI: return XAIModelsAPI.allModels
         case .kimiCode: return KimiModelsAPI.allModels
+        case .appleFoundation: return AppleFoundationProvider.models
         case .unsupported: return []
         }
     }
@@ -82,6 +85,8 @@ enum ProviderType: String, Codable, CaseIterable, Hashable, Sendable {
             return AppLocalized("Sign in with your Kimi Code / Coding Plan subscription")
         case .antigravity:
             return AppLocalized("\(builtInModels.count) built-in models")
+        case .appleFoundation:
+            return AppLocalized("On-device intelligence and Private Cloud Compute")
         case .unsupported:
             return AppLocalized("\(builtInModels.count) built-in models")
         }
@@ -98,6 +103,7 @@ enum ProviderType: String, Codable, CaseIterable, Hashable, Sendable {
         case .openAIResponses: return .vision
         case .xAI: return .vision
         case .kimiCode: return .vision
+        case .appleFoundation: return .textOnly
         case .unsupported: return .vision
         }
     }

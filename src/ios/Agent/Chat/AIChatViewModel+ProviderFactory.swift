@@ -24,6 +24,8 @@ extension AIChatViewModel {
             return AnthropicAgentProvider(provider: AnthropicProvider(apiKey: "", model: entry.model))
         }
         switch instance.providerType {
+        case .appleFoundation:
+            return AppleFoundationProvider(model: entry.model)
         case .anthropic:
             return AnthropicAgentProvider(provider: LLMProviderFactory.makeAnthropicProvider(instance: instance, model: entry.model))
         case .gemini:
@@ -70,6 +72,8 @@ extension AIChatViewModel {
         // OAuth-login paths keep their required client UA (nil here). Mirrors LLMProviderFactory.
         let ua = instance.supportsCustomUserAgent ? instance.effectiveCustomUserAgent : nil
         switch instance.providerType {
+        case .appleFoundation:
+            return AppleFoundationProvider(model: entry.model)
         case .anthropic:
             switch instance.credentialType {
             case .apiKey:

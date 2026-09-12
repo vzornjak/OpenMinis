@@ -400,13 +400,16 @@ struct AddProviderView: View {
     private var visibleProviderTypes: [ProviderType] {
         ProviderType.allCases.filter {
             $0 != .openAIResponses && $0 != .antigravity
-                && !$0.isUnsupported
+                && !$0.isUnsupported && $0 != .appleFoundation
         }
     }
 
     @ViewBuilder
     private var typePickerSection: some View {
         Section {
+            NavigationLink { AppleFoundationSettingsView() } label: {
+                Label("Apple Foundation Models", systemImage: "apple.intelligence")
+            }
             ForEach(visibleProviderTypes, id: \.self) { type in
                 Button {
                     selectedType = type
@@ -964,7 +967,7 @@ struct AddProviderView: View {
             case .openAIResponses: break // API key only, no OAuth
             case .xAI: try await XAIOAuthManager.shared.login(instanceId: pendingInstanceId)
             case .kimiCode: break // device-code flow runs in KimiDeviceLoginSheet, not here
-            case .unsupported: break // free / unsupported — no OAuth
+            case .appleFoundation, .unsupported: break // free / unsupported — no OAuth
             }
             oauthAuthTime = Date()
             oauthMaskedToken = loadMaskedToken(type: type)
@@ -995,7 +998,7 @@ struct AddProviderView: View {
             token = ProviderKeychainHelper.loadOAuthToken(instanceId: pendingInstanceId, as: XAITokenStorage.self)?.accessToken
         case .kimiCode:
             token = ProviderKeychainHelper.loadOAuthToken(instanceId: pendingInstanceId, as: KimiTokenStorage.self)?.accessToken
-        case .unsupported:
+        case .appleFoundation, .unsupported:
             token = nil // free / unsupported — no token
         }
         guard let t = token, !t.isEmpty else { return nil }
@@ -1073,7 +1076,7 @@ struct AddProviderView: View {
         case .openAIResponses: return AppLocalized("Sign In") // Not reachable — API key only
         case .xAI: return AppLocalized("Sign in with xAI")
         case .kimiCode: return AppLocalized("Sign in with Kimi Code")
-        case .unsupported: return AppLocalized("Sign In")
+        case .appleFoundation, .unsupported: return AppLocalized("Sign In")
         }
     }
 
@@ -1088,7 +1091,7 @@ struct AddProviderView: View {
         case .openAIResponses: return "sk-..."
         case .xAI: return "xai-..."
         case .kimiCode: return "" // OAuth only
-        case .unsupported: return ""
+        case .appleFoundation, .unsupported: return ""
         }
     }
 
@@ -1102,7 +1105,7 @@ struct AddProviderView: View {
         case .openAIResponses: return "Responses API"
         case .xAI: return "xAI (Grok)"
         case .kimiCode: return "Kimi Code"
-        case .unsupported: return AppLocalized("Unsupported")
+        case .appleFoundation, .unsupported: return AppLocalized("Unsupported")
         }
     }
 
@@ -1151,7 +1154,7 @@ struct AddProviderView: View {
             return AppLocalized("Sign in with your Kimi Code / Coding Plan subscription.")
         case (.kimiCode, .apiKey):
             return AppLocalized("Use a Kimi Coding API key.")
-        case (.unsupported, _):
+        case (.appleFoundation, _), (.unsupported, _):
             return AppLocalized("This provider isn't supported in this app version.")
         }
     }
@@ -1183,7 +1186,7 @@ struct AddProviderView: View {
         case .kimiCode:
             Image(systemName: "moon.stars")
                 .foregroundStyle(.indigo)
-        case .unsupported:
+        case .appleFoundation, .unsupported:
             Image(systemName: "questionmark.circle")
                 .foregroundStyle(.gray)
         }
@@ -1199,7 +1202,7 @@ struct AddProviderView: View {
         case .openAIResponses: return .mint
         case .xAI: return .gray
         case .kimiCode: return .indigo
-        case .unsupported: return .gray
+        case .appleFoundation, .unsupported: return .gray
         }
     }
 }

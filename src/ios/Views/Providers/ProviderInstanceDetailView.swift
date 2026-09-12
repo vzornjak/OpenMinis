@@ -36,7 +36,11 @@ struct ProviderInstanceDetailView: View {
     var body: some View {
         Group {
             if let instance = instance {
-                instanceContent(instance)
+                if instance.providerType == .appleFoundation {
+                    AppleFoundationSettingsView()
+                } else {
+                    instanceContent(instance)
+                }
             } else {
                 Text("Instance not found")
                     .foregroundStyle(.secondary)
@@ -535,7 +539,7 @@ struct ProviderInstanceDetailView: View {
         case .openAIResponses: return "https://api.openai.com/v1"
         case .xAI: return "https://api.x.ai/v1"
         case .kimiCode: return "https://api.kimi.com/coding"
-        case .unsupported: return "—"
+        case .appleFoundation, .unsupported: return "—"
         }
     }
 
@@ -902,7 +906,7 @@ struct ProviderInstanceDetailView: View {
         case .openAIResponses: return false // API key only
         case .xAI: return XAIOAuthManager.shared.isAuthenticated(instanceId: instance.id)
         case .kimiCode: return KimiOAuthManager.shared.isAuthenticated(instanceId: instance.id)
-        case .unsupported: return false // synced from newer build
+        case .appleFoundation, .unsupported: return false // synced from newer build
         }
     }
 
@@ -963,7 +967,7 @@ struct ProviderInstanceDetailView: View {
         case .kimiCode:
             return KimiOAuthManager.shared.isAuthenticated(instanceId: instance.id)
                 ? AppLocalized("Authenticated") : AppLocalized("Not authenticated")
-        case .unsupported:
+        case .appleFoundation, .unsupported:
             return AppLocalized("Unsupported in this app version")
         }
     }
@@ -978,7 +982,7 @@ struct ProviderInstanceDetailView: View {
         case .openAIResponses: return AppLocalized("Sign In")
         case .xAI: return AppLocalized("Sign in with xAI")
         case .kimiCode: return AppLocalized("Sign in with Kimi Code")
-        case .unsupported: return AppLocalized("Sign In")
+        case .appleFoundation, .unsupported: return AppLocalized("Sign In")
         }
     }
 
@@ -993,7 +997,7 @@ struct ProviderInstanceDetailView: View {
             case .openAIResponses: break
             case .xAI: try await XAIOAuthManager.shared.login(instanceId: instance.id)
             case .kimiCode: break // device-code flow runs in KimiDeviceLoginSheet
-            case .unsupported: break
+            case .appleFoundation, .unsupported: break
             }
         } catch {
             await MainActor.run {
@@ -1012,7 +1016,7 @@ struct ProviderInstanceDetailView: View {
         case .openAIResponses: break // API key only
         case .xAI: XAIOAuthManager.shared.logout(instanceId: instance.id)
         case .kimiCode: KimiOAuthManager.shared.logout(instanceId: instance.id)
-        case .unsupported: break
+        case .appleFoundation, .unsupported: break
         }
     }
 
@@ -1035,7 +1039,7 @@ struct ProviderInstanceDetailView: View {
             token = try? await XAIOAuthManager.shared.validAccessToken(instanceId: instance.id)
         case .kimiCode:
             token = try? await KimiOAuthManager.shared.validAccessToken(instanceId: instance.id)
-        case .unsupported:
+        case .appleFoundation, .unsupported:
             token = nil
         }
         guard let token, !token.isEmpty else { return }
@@ -1054,7 +1058,7 @@ struct ProviderInstanceDetailView: View {
         case .antigravity: return "API Key..."
         case .openRouter: return "sk-or-..."
         case .openAIResponses: return "sk-..."
-        case .unsupported: return ""
+        case .appleFoundation, .unsupported: return ""
         }
     }
 

@@ -1,0 +1,21 @@
+name: Fork checks
+on:
+  push:
+    branches: [ios-hr-apple, 'update/**']
+  pull_request:
+    branches: [ios-hr-apple]
+permissions:
+  contents: read
+jobs:
+  overlays:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Croatian strings, placeholders, code and URLs
+        run: python3 scripts/fork/localize.py
+      - name: Validate Personal Team adaptation against upstream anchors
+        run: python3 scripts/fork/build.py --personal-team --prepare-only
+      - name: Check maintained source was not rewritten
+        run: git diff --exit-code
+      - name: Check update script syntax
+        run: bash -n scripts/fork/update.sh

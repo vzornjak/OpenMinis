@@ -192,11 +192,12 @@ funkcionalnosti. Minimalna provjera na iPhoneu za svako izdanje:
   iPhone uspješna (`com.vzornjak.openminis`). Profil vrijedi do 19. rujna 2026. u 22:50 UTC
   (20. rujna u 00:50 po zagrebačkom vremenu).
   CLI pristup ključu vraća `errSecInternalComponent`; GUI potpisivanje radi.
-  Pokretanje na fizičkom iPhoneu sada je potvrđeno.
-  Nakon uspješnih testova veza s uređajem prekinula se. Ponovna instalacija
-  završnog običnog paketa, bez testnog dodatka, još nije potvrđena: `devicectl`
-  je prijavio prekid veze i isteke vremena. Potpisani paket je sačuvan u
-  `.build/signed/Minis.app`; aplikaciju ne treba brisati radi nadogradnje.
+  Pokretanje ranijeg builda na fizičkom iPhoneu potvrđeno je.
+  Nakon uspješnih testova završni obični paket, bez testnog dodatka, također
+  je uspješno instaliran. Njegovo završno pokretanje čeka otključavanje
+  iPhonea: sustav je izričito vratio `BSErrorCodeDescription = Locked`.
+  Potpisani paket je sačuvan u `.build/signed/Minis.app`; aplikaciju ne treba
+  brisati radi nadogradnje.
 - Apple Intelligence nije uključen na korištenom Macu, pa je njegov test
   inferencije preskočen. Stvarna lokalna inferencija potvrđena je na iPhoneu.
   PCC nije odobren i nije pokrenut. Obrada slika, hrvatski odgovori i cijeli

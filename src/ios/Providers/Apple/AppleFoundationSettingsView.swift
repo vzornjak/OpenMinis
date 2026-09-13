@@ -24,6 +24,8 @@ struct AppleFoundationSettingsView: View {
                      ? AppLocalized("Apple reports Croatian model support on this device.")
                      : AppLocalized("Croatian UI is available. Apple does not report Croatian model support on this device; responses may be limited."))
                     .font(.footnote).foregroundStyle(.secondary)
+                Text("To try Croatian replies, choose Croatian in Settings → Soul → Language. The app sends an explicit Croatian instruction even when Apple does not list support; the model may still reject it or answer incorrectly.")
+                    .font(.footnote).foregroundStyle(.secondary)
             }
             Section("Private Cloud Compute") {
                 if AppleFoundationProvider.pccEntitled {

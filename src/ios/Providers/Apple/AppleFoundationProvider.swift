@@ -63,12 +63,13 @@ final class AppleFoundationProvider: LLMProvider, AgentProvider, @unchecked Send
         use shell_execute's delay parameter. Respect the memory setting below.
         Link created files using minis://workspace/relative-path. These are internal
         resource URLs, not internet addresses. Preserve user files and secrets.
-        Respond in the user's language when supported. Keep answers concise.
+        Follow the explicit response-language preference above. Otherwise respond
+        in the user's language. Keep answers concise.
         """
     }
 
     enum Failure: LocalizedError {
-        case unavailable, pccNotEntitled, requiresIOS27, unsupportedMedia, invalidHistory, unsupportedModel, contextFull
+        case unavailable, pccNotEntitled, requiresIOS27, unsupportedMedia, invalidHistory, unsupportedModel, contextFull, unsupportedLanguage
         var errorDescription: String? {
             switch self {
             case .unavailable: return AppLocalized("Apple Intelligence is unavailable. Enable it in Settings and wait for the model download.")
@@ -78,6 +79,7 @@ final class AppleFoundationProvider: LLMProvider, AgentProvider, @unchecked Send
             case .invalidHistory: return AppLocalized("The conversation contains incomplete tool calls. Retry the interrupted turn or start a new chat.")
             case .unsupportedModel: return AppLocalized("Unknown Apple model. Refresh the provider's models.")
             case .contextFull: return AppLocalized("The local Apple model's context is full. Start a shorter chat or reduce enabled skills and memory. Cloud use is your choice.")
+            case .unsupportedLanguage: return AppLocalized("Apple's model rejected the requested language. The Soul language preference cannot override this framework limit. Choose another language or a model that supports Croatian.")
             }
         }
     }
@@ -164,10 +166,23 @@ final class AppleFoundationProvider: LLMProvider, AgentProvider, @unchecked Send
                         continuation.yield(.done(stopReason: .toolUse))
                         continuation.finish()
                     } catch { continuation.finish(throwing: error) }
-                } catch { continuation.finish(throwing: error) }
+                } catch { continuation.finish(throwing: Self.userFacingError(error)) }
             }
             continuation.onTermination = { _ in task.cancel() }
         }
+    }
+
+    static func userFacingError(_ error: Error) -> Error {
+        if #available(iOS 27, macOS 27, *),
+           let languageError = error as? LanguageModelError,
+           case .unsupportedLanguageOrLocale = languageError {
+            return Failure.unsupportedLanguage
+        }
+        if let generationError = error as? LanguageModelSession.GenerationError,
+           case .unsupportedLanguageOrLocale = generationError {
+            return Failure.unsupportedLanguage
+        }
+        return error
     }
 
     static func transcript(messages: [AgentMessage], systemPrompt: String?, tools: [AppleToolBridge]) throws -> Transcript {

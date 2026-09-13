@@ -14,6 +14,7 @@ let package = Package(name: "AppleAdapterTests", platforms: [.macOS("26.4")],
 ''')
 for name in ['AgentProvider.swift','LLMProvider.swift','Apple/AppleFoundationProvider.swift']:
  shutil.copy2(ROOT/'src/ios/Providers'/name,src/pathlib.Path(name).name)
+shutil.copy2(ROOT/'src/ios/Agent/Session/SoulResponseLanguage.swift',src/'SoulResponseLanguage.swift')
 shutil.copy2(ROOT/'scripts/fork/test-support/ModelCatalogFixture.swift',src/'ModelCatalogFixture.swift')
 s=(ROOT/'src/ios/Providers/LLMTypes.swift').read_text()
 # Extract whole declarations using balanced braces; no maintained duplicate wire types.

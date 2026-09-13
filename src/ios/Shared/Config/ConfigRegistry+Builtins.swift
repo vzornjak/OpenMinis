@@ -248,8 +248,8 @@ extension ConfigRegistry {
         r.register(ClosureField(
             path: "soul.lang",
             displayName: "Soul language preference",
-            description: "Preferred reply language hint: auto / zh / en. Stored in SOUL.md frontmatter for forward use; the agent should respect it when set non-auto.",
-            valueSchema: .stringEnum(["auto", "zh", "en"]),
+            description: "Preferred reply language: auto / zh / en / hr. Stored in SOUL.md and included in the system prompt when non-auto; the user's explicit language request takes priority.",
+            valueSchema: .stringEnum(SoulResponseLanguage.allCases.map(\.rawValue)),
             risk: .normal, revertable: true,
             reader: {
                 // Older SOUL.md files may have no `lang` field — surface
@@ -257,7 +257,7 @@ extension ConfigRegistry {
                 // SoulMetadata.default fallback so the contract matches
                 // the enum.
                 let raw = currentFile().metadata.lang
-                let normalized = ["auto", "zh", "en"].contains(raw) ? raw : "auto"
+                let normalized = SoulResponseLanguage(rawValue: raw)?.rawValue ?? "auto"
                 return .string(normalized)
             },
             writer: { v in

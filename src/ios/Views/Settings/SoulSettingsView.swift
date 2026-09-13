@@ -32,11 +32,15 @@ struct SoulSettingsView: View {
     @AppStorage("cloudSync.v2.enabled") private var iCloudSyncEnabled: Bool = false
 
     private static var langOptions: [(label: String, value: String)] {
-        [
-            (AppLocalized("Auto"), "auto"),
-            (AppLocalized("Chinese"), "zh"),
-            (AppLocalized("English"), "en"),
-        ]
+        SoulResponseLanguage.allCases.map { language in
+            let label: String = switch language {
+            case .auto: AppLocalized("Auto")
+            case .zh: AppLocalized("Chinese")
+            case .en: AppLocalized("English")
+            case .hr: AppLocalized("Croatian")
+            }
+            return (label, language.rawValue)
+        }
     }
 
     var body: some View {

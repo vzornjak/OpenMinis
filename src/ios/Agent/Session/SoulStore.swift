@@ -476,7 +476,7 @@ struct SoulMetadata: Equatable {
     /// already has one.
     var emoji: String
     var style: String
-    /// `"auto"`, `"zh"`, `"en"`, or any free-form tag.
+    /// `"auto"`, `"zh"`, `"en"`, `"hr"`, or a preserved legacy free-form tag.
     var lang: String
 
     /// [T-soul-custom-icon] User-chosen identity icon. Either a short
@@ -485,7 +485,7 @@ struct SoulMetadata: Equatable {
     ///
     /// This lives in SOUL.md frontmatter, NOT in the body, and that is
     /// load-bearing: `identitySection()` builds the system prompt from a
-    /// fixed whitelist (`name` / `style` / body) and never serializes
+    /// fixed whitelist (`name` / `style` / `lang` / body) and never serializes
     /// frontmatter wholesale, so a ~20 KB data URI here costs zero prompt
     /// tokens. Putting it in the body would both burn context and count
     /// against the body length limit.
@@ -920,8 +920,7 @@ enum SystemPromptBuilder {
     /// We never substitute a default body into the prompt — the identity
     /// sentence alone is the safe fallback when SOUL.md is missing or
     /// empty, matching pre-SOUL behavior.
-    static func identitySection() -> String {
-        let file = SoulStore.load()
+    static func identitySection(file: SoulFile? = SoulStore.load()) -> String {
         let name: String = {
             let n = (file?.metadata.name ?? SoulMetadata.default.name)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
@@ -931,7 +930,8 @@ enum SystemPromptBuilder {
             .trimmingCharacters(in: .whitespacesAndNewlines)
 
         let identity = identityTemplate.replacingOccurrences(of: "{name}", with: name)
-        let identityTrimmed = identity.trimmingCharacters(in: .whitespaces)
+        let language = SoulResponseLanguage(rawValue: file?.metadata.lang ?? "auto") ?? .auto
+        let identityTrimmed = identity.trimmingCharacters(in: .whitespaces) + language.instructions
 
         // [T-soul-hint] Fixed hint telling the model how SOUL fields can be
         // changed. Always appended (with or without a personality body) so

@@ -209,5 +209,6 @@
   "Authorization Endpoint (https://…/authorize)": "Autorizacijska adresa (https://…/authorize)",
   "https://…": "https://…",
   "Token Endpoint (https://…/token)": "Adresa za token (https://…/token)",
-  "When enabled, any environment variable value that appears in shell-execute output is replaced with a masked form (e.g. `sk-1********ajhks`) before reaching the model. Values shorter than 8 characters become all `*`. The user-visible output in chat is unchanged.": "Kad je uključeno, vrijednosti varijabli okruženja u izlazu naredbe shell-execute skrivaju se prije slanja modelu (npr. `sk-1********ajhks`). Vrijednosti kraće od 8 znakova zamjenjuju se znakovima `*`. Izlaz koji korisnik vidi u razgovoru ostaje isti."
+  "When enabled, any environment variable value that appears in shell-execute output is replaced with a masked form (e.g. `sk-1********ajhks`) before reaching the model. Values shorter than 8 characters become all `*`. The user-visible output in chat is unchanged.": "Kad je uključeno, vrijednosti varijabli okruženja u izlazu naredbe shell-execute skrivaju se prije slanja modelu (npr. `sk-1********ajhks`). Vrijednosti kraće od 8 znakova zamjenjuju se znakovima `*`. Izlaz koji korisnik vidi u razgovoru ostaje isti.",
+  "Croatian": "Hrvatski"
 }

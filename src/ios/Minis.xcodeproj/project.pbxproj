@@ -372,6 +372,7 @@
 		E5SHV0003 /* SharedFoldersSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5SHV0103 /* SharedFoldersSettingsView.swift */; };
 		E5SHV0004 /* MountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5SHV0104 /* MountDetailView.swift */; };
 		E5SOUL001 /* SoulStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5SOUL101 /* SoulStore.swift */; };
+		FA0000000000000000000022 /* SoulResponseLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000021 /* SoulResponseLanguage.swift */; };
 		E5SOUL002 /* SoulSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5SOUL102 /* SoulSettingsView.swift */; };
 		E5SVP0021 /* ShadowVoiceProviderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5SVP0031 /* ShadowVoiceProviderDetailView.swift */; };
 		E5T000001 /* SessionEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5T000011 /* SessionEntity.swift */; };
@@ -1059,6 +1060,7 @@
 		E5SHV0103 /* SharedFoldersSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedFoldersSettingsView.swift; sourceTree = "<group>"; };
 		E5SHV0104 /* MountDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MountDetailView.swift; sourceTree = "<group>"; };
 		E5SOUL101 /* SoulStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoulStore.swift; sourceTree = "<group>"; };
+		FA0000000000000000000021 /* SoulResponseLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoulResponseLanguage.swift; sourceTree = "<group>"; };
 		E5SOUL102 /* SoulSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoulSettingsView.swift; sourceTree = "<group>"; };
 		E5SVP0031 /* ShadowVoiceProviderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowVoiceProviderDetailView.swift; sourceTree = "<group>"; };
 		E5T000011 /* SessionEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEntity.swift; sourceTree = "<group>"; };
@@ -2092,6 +2094,7 @@
 				F1MCPSTORE /* MCPStore.swift */,
 				F1MCPOAUTH /* MCPOAuthController.swift */,
 				E5SOUL101 /* SoulStore.swift */,
+				FA0000000000000000000021 /* SoulResponseLanguage.swift */,
 			);
 			path = Session;
 			sourceTree = "<group>";
@@ -2977,6 +2980,7 @@
 				F1VMCPB4 /* SessionMCPsView.swift in Sources */,
 				E5LOCK001 /* SessionLockStore.swift in Sources */,
 				E5SOUL001 /* SoulStore.swift in Sources */,
+				FA0000000000000000000022 /* SoulResponseLanguage.swift in Sources */,
 				E5SOUL002 /* SoulSettingsView.swift in Sources */,
 				E5LOCK002 /* FaceIDProtectionSettingsView.swift in Sources */,
 				E5LOCK003 /* AppLockOverlay.swift in Sources */,

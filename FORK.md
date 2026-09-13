@@ -178,9 +178,12 @@ funkcionalnosti. Minimalna provjera na iPhoneu za svako izdanje:
 - Izgradnja pune varijante bez potpisa: **BUILD SUCCEEDED**.
 - Izgradnja Personal Team varijante bez potpisa: **BUILD SUCCEEDED**.
 - Mac adapter testovi: **9 prošlo, 1 preskočen, 0 grešaka**.
-- Fokusirani XCTest paket za fizički iPhone: **BUILD SUCCEEDED**, potpis
-  provjeren; stvarni app modul, bez fixture zamjene. Izvršavanje na uređaju
-  još nije potvrđeno jer je iPhone postao nedostupan.
+- Fokusirani testovi na fizičkom iPhoneu 15 Pro s iOS-om 27:
+  **10 prošlo, 0 preskočenih, 0 grešaka — TEST EXECUTE SUCCEEDED**.
+  Testovi koriste stvarni app modul, bez fixture zamjene. Lokalni Apple model
+  uspješno je zatražio alat, preuzeo njegov stvarni rezultat i uključio ga
+  u odgovor; taj test trajao je 7,126 sekundi. To potvrđuje adapter i predaju
+  alata, ali ne zamjenjuje provjeru cijelog razgovora i dopuštenja kroz UI.
 - GitHub `Fork checks` prolazi. Probno osvježavanje iz izvornika prolazi;
   lokalni i udaljeni `main` odgovaraju potvrđenom upstream SHA-u.
 - Katalog: **2163/2163**, bez nedostajućih ili nevaljanih ključeva.
@@ -190,10 +193,14 @@ funkcionalnosti. Minimalna provjera na iPhoneu za svako izdanje:
   (20. rujna u 00:50 po zagrebačkom vremenu).
   CLI pristup ključu vraća `errSecInternalComponent`; GUI potpisivanje radi.
   Pokretanje na fizičkom iPhoneu sada je potvrđeno.
-  iPhone je zatim postao nedostupan Xcodeu, pa izvršavanje testova lokalnog
-  modela i instalacija zadnje dorade čekaju ponovno povezivanje uređaja.
-- Apple Intelligence nije uključen na korištenom Macu, pa lokalna inferencija
-  nije potvrđena. PCC nije odobren i nije pokrenut.
+  Nakon uspješnih testova veza s uređajem prekinula se. Ponovna instalacija
+  završnog običnog paketa, bez testnog dodatka, još nije potvrđena: `devicectl`
+  je prijavio prekid veze i isteke vremena. Potpisani paket je sačuvan u
+  `.build/signed/Minis.app`; aplikaciju ne treba brisati radi nadogradnje.
+- Apple Intelligence nije uključen na korištenom Macu, pa je njegov test
+  inferencije preskočen. Stvarna lokalna inferencija potvrđena je na iPhoneu.
+  PCC nije odobren i nije pokrenut. Obrada slika, hrvatski odgovori i cijeli
+  popis ručnih provjera iznad još nisu potvrđeni na uređaju.
 - Originalni build prvo je zapeo na stvarnom deployment targetu 16.0 koji
   ne odgovara korištenim API-jima, a potom na predugom SwiftUI izrazu.
   Fork postavlja iOS 27 i dijeli jedan lanac modifikatora ContentViewa.
@@ -207,8 +214,9 @@ funkcionalnosti. Minimalna provjera na iPhoneu za svako izdanje:
   postojeće unutarnje usmjeravanje. Vanjski launcher/OAuth treba dodatnu
   provjeru prije paralelne svakodnevne uporabe.
 
-Kad je iPhone ponovno dostupan, već potpisane fokusirane testove može se
-pokrenuti bez nove izgradnje i potpisivanja:
+Već potpisani fokusirani testovi uspješno su pokrenuti bez nove izgradnje
+i potpisivanja sljedećom naredbom. Za novo pokretanje koristiti novu putanju
+rezultata ili prethodno sačuvati postojeći rezultat:
 
 ```sh
 DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer xcodebuild \
@@ -220,6 +228,8 @@ DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer xcodebuild \
 ```
 
 Ovaj snapshot sadrži test stvarnog modela uključen u testnoj okolini.
+Rezultat je sačuvan u `.build/device-tests-result.xcresult`, a strojno čitljiv
+sažetak u `.build/device-test-summary.json`.
 Lokalni detaljni logovi su u `.build/logs/`. Izvorno istraživanje svih grana je
 u susjednoj mapi `../research/openminis-2026-09-13/REPORT.md`. Buildovi,
 prevoditeljski modeli i cache nisu dio javnog repozitorija. GPLv3 i izvorne

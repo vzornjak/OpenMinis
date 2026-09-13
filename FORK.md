@@ -38,6 +38,30 @@ strojnim prevođenjem uz ručne ispravke; cjelovita jezična i vizualna provjera
 na iPhoneu još nije završena. Izvorni tekstovi pomoći za terminal i logovi
 nisu prevedeni ovim UI slojem.
 
+### Jezik odgovora: Postavke → Osobnost → Jezik
+
+Izvorni Soul izbornik imao je ručno navedene samo Auto, kineski i engleski.
+`SOUL.md` je spremao `lang`, ali ga `SystemPromptBuilder.identitySection()`
+nije uključivao u uputu modelu. To je odvojeno od jezika sučelja i vještina.
+
+Fork dodaje **Hrvatski** (`hr`) u izbornik i `minis-config` shemu. Odabrani
+jezik sada ulazi u sistemsku uputu glavnog agenta, s praznom, običnom ili
+predugom osobnošću. Auto zadržava izvorno ponašanje. Korisnikov izričit
+zahtjev za drugim jezikom ima prednost, a kod, naredbe, putanje i izvorni
+citirani podaci ostaju neprevedeni.
+
+Za Appleov model šalje se izričita uputa na engleskom i hrvatskom čak i kada
+`supportsLocale(hr)` vrati false. Nema preventivne zabrane hrvatskog ni
+automatskog odlaska u oblak. To je pokušaj usmjeravanja izlaza, bez jamstva
+jezične točnosti ili zaobilaženja ograničenja frameworka. Eventualni
+`unsupportedLanguageOrLocale` dobiva razumljivu poruku. Apple opisuje takvu
+grešku u [dokumentaciji](https://developer.apple.com/documentation/foundationmodels/languagemodelerror/unsupportedlanguageorlocale).
+
+Na iPhoneu je 13. rujna potvrđeno `supportsLocale(hr) = false` uz tri stvarna
+odgovora na hrvatskom. Odgovori su imali gramatičke i činjenične pogreške;
+[zapis pokusa](docs/fork/CROATIAN_MODEL_CHECK.md) čuva doslovne izlaze i granice
+ove provjere.
+
 ## Besplatni Apple račun
 
 `--personal-team` generira zasebnu razvojnu varijantu. Apple je prihvatio njezin
@@ -129,6 +153,8 @@ python3 scripts/fork/build.py --team TEAM_ID --pcc
 
 Generirani projekti su `.build/ios-source/src/ios/Minis.xcodeproj` i
 `.build/ios-source-personal/src/ios/Minis.xcodeproj`. Ne uređivati ih ručno.
+Prije ponovne pripreme zatvoriti generirani projekt u Xcodeu: skripta
+zamjenjuje generiranu kopiju i njezinu testnu shemu.
 CLI DerivedData i aplikacije nalaze se u `.build/fork-derived` odnosno
 `.build/fork-derived-personal`, pod `Build/Products/Debug-iphoneos/Minis.app`.
 GUI buildovi su u `.build/gui-derived` odnosno `.build/gui-derived-personal`.
@@ -177,13 +203,21 @@ funkcionalnosti. Minimalna provjera na iPhoneu za svako izdanje:
 
 - Izgradnja pune varijante bez potpisa: **BUILD SUCCEEDED**.
 - Izgradnja Personal Team varijante bez potpisa: **BUILD SUCCEEDED**.
-- Mac adapter testovi: **9 prošlo, 1 preskočen, 0 grešaka**.
-- Fokusirani testovi na fizičkom iPhoneu 15 Pro s iOS-om 27:
+- Mac adapter testovi nakon jezične dorade: **10 prošlo, 2 preskočena,
+  0 grešaka**. Preskočeni su pokusi sa stvarnim lokalnim modelom.
+- Prvotna provjera prije jezične dorade, fizički iPhone 15 Pro s iOS-om 27:
   **10 prošlo, 0 preskočenih, 0 grešaka — TEST EXECUTE SUCCEEDED**.
   Testovi koriste stvarni app modul, bez fixture zamjene. Lokalni Apple model
   uspješno je zatražio alat, preuzeo njegov stvarni rezultat i uključio ga
   u odgovor; taj test trajao je 7,126 sekundi. To potvrđuje adapter i predaju
   alata, ali ne zamjenjuje provjeru cijelog razgovora i dopuštenja kroz UI.
+- Nakon jezične dorade prošli su provjera spremanja/učitavanja odabranog
+  jezika, prijenos u produkcijsku uputu i pokus s tri hrvatska odgovora.
+  Prva skupina imala je 12 prolaznih testova i jedan prekid procesa signalom
+  KILL u testu alata; taj test potom zasebno prolazi za 6,575 sekundi.
+  Novo skupno pokretanje ponovno je prekinuto tijekom inferencije. Logovi
+  bilježe prelazak aplikacije u pozadinu prije prekida; uzrok samog KILL-a
+  nije potvrđen. Ne tvrdimo da je cijela nova skupina prošla bez prekida.
 - GitHub `Fork checks` prolazi. Probno osvježavanje iz izvornika prolazi;
   lokalni i udaljeni `main` odgovaraju potvrđenom upstream SHA-u.
 - Katalog: **2163/2163**, bez nedostajućih ili nevaljanih ključeva.
@@ -192,15 +226,14 @@ funkcionalnosti. Minimalna provjera na iPhoneu za svako izdanje:
   iPhone uspješna (`com.vzornjak.openminis`). Profil vrijedi do 19. rujna 2026. u 22:50 UTC
   (20. rujna u 00:50 po zagrebačkom vremenu).
   CLI pristup ključu vraća `errSecInternalComponent`; GUI potpisivanje radi.
-  Pokretanje ranijeg builda na fizičkom iPhoneu potvrđeno je.
-  Nakon uspješnih testova završni obični paket, bez testnog dodatka, također
-  je uspješno instaliran. Njegovo završno pokretanje čeka otključavanje
-  iPhonea: sustav je izričito vratio `BSErrorCodeDescription = Locked`.
+  Završni obični paket nakon jezične dorade, bez testnog dodatka, uspješno
+  je instaliran i pokrenut na iPhoneu 13. rujna. Logovi: `language-final-install.log`
+  i `language-final-launch.log` u `.build/logs/`.
   Potpisani paket je sačuvan u `.build/signed/Minis.app`; aplikaciju ne treba
   brisati radi nadogradnje.
 - Apple Intelligence nije uključen na korištenom Macu, pa je njegov test
   inferencije preskočen. Stvarna lokalna inferencija potvrđena je na iPhoneu.
-  PCC nije odobren i nije pokrenut. Obrada slika, hrvatski odgovori i cijeli
+  PCC nije odobren i nije pokrenut. Obrada slika i cijeli
   popis ručnih provjera iznad još nisu potvrđeni na uređaju.
 - Originalni build prvo je zapeo na stvarnom deployment targetu 16.0 koji
   ne odgovara korištenim API-jima, a potom na predugom SwiftUI izrazu.
